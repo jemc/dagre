@@ -38,6 +38,7 @@ export default function rank (g) {
     case 'network-simplex': networkSimplexRanker(g); break
     case 'tight-tree': tightTreeRanker(g); break
     case 'longest-path': longestPathRanker(g); break
+    case 'longest-path-align-sources': longestPathRanker(g, true); break
     default: networkSimplexRanker(g)
   }
 }

@@ -21,7 +21,7 @@ import _ from 'lodash'
  *
  *    1. Each node will be assign an (unnormalized) "rank" property.
  */
-export function longestPath (g) {
+export function longestPath (g, alignSources) {
   var visited = {}
 
   function dfs (v) {
@@ -47,6 +47,19 @@ export function longestPath (g) {
   }
 
   _.forEach(g.sources(), dfs)
+
+  if (alignSources) {
+    // Start with each source node (each a dummy that is predecessor to all).
+    _.forEach(g.sources(), function (dummy) {
+      // Iterate over all successors of the dummy.
+      _.forEach(g.successors(dummy), function (v) {
+        // Those whose only predecessor is the dummy node are true sources,
+        // and should all be aligned at a rank just "after" the dummy node.
+        if (_.isEqual(g.predecessors(v), [dummy]))
+          g.node(v).rank = g.node(dummy).rank + 1
+      })
+    })
+  }
 }
 
 /*
